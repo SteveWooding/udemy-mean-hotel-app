@@ -3,7 +3,7 @@ var app = express();
 var path = require('path');
 
 // Import routes directory
-var routes = require('./routes');
+var routes = require('./api/routes');
 
 // Define the port to run on
 app.set('port', 3000);
