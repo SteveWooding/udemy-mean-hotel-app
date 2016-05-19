@@ -5,7 +5,13 @@ var path = require('path');
 // Define the port to run on
 app.set('port', 3000);
 
-// Define where the static files are located
+// Define some middleware to log requests. Order of app.use() calls matters.
+app.use(function(req, res, next) {
+  console.log(req.method, req.url);
+  next();
+});
+
+// Define where the static files are located. An example of middleware.
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Define a route for some JSON data
