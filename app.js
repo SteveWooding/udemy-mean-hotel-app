@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var path = require('path');
+var bodyParser = require('body-parser');
 
 // Import routes directory
 var routes = require('./api/routes');
@@ -16,6 +17,9 @@ app.use(function(req, res, next) {
 
 // Define where the static files are located. An example of middleware.
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Use body parser to capture content of POST requests (e.g data in forms)
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Use routes as defined in the routes sub-directory for /api urls.
 app.use('/api', routes);
