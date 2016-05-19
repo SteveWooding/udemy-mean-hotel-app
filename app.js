@@ -5,13 +5,8 @@ var path = require('path');
 // Define the port to run on
 app.set('port', 3000);
 
-// Define a route for the homepage
-app.get('/', function(req, res) {
-  console.log('GET the homepage');
-  res
-    .status(200)
-    .sendFile(path.join(__dirname, 'public', 'index.html'));
-});
+// Define where the static files are located
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Define a route for some JSON data
 app.get('/json', function(req, res) {
