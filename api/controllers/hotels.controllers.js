@@ -1,10 +1,14 @@
+var dbconn = require('../data/dbconnection.js');
+
 // Bring some hard coded temporary data
 var hotelData = require('../data/hotel-data.json');
 
 // Controller to return all the hotel data.
 module.exports.hotelsGetAll = function(req, res) {
-  console.log('GET the hotels');
-  console.log(req.query);
+
+  // Get the database connection
+  var db = dbconn.get();
+  var collection = db.collection('hotels');
 
   // Set defaults for paganation
   var offset = 0;
@@ -20,17 +24,28 @@ module.exports.hotelsGetAll = function(req, res) {
     count = parseInt(req.query.count, 10);
   }
 
-  // Extract the requested data
-  var returnData = hotelData.slice(offset, offset + count);
+  // From the database collection, get the hotels according to any offset and
+  // count query strings present in the requested URL.
+  collection
+    .find()
+    .skip(offset)
+    .limit(count)
+    .toArray(function(err, docs) {
+      console.log('Found hotels', docs);
+      res
+        .status(200)
+        .json(docs);
+    });
 
-  // Define the response
-  res
-    .status(200)
-    .json(returnData);
 };
 
 // Controller to return data on a singal hotel.
 module.exports.hotelsGetOne = function(req, res) {
+
+  // Get the database connection
+  var db = dbconn.get();
+  console.log('db', db);
+
   // Get the URL parmater for the hotel ID.
   var hotelId = req.params.hotelId;
 
@@ -46,6 +61,11 @@ module.exports.hotelsGetOne = function(req, res) {
 
 // Controller to add a hotel
 module.exports.hotelsAddOne = function(req, res) {
+
+  // Get the database connection
+  var db = dbconn.get();
+  console.log('db', db);
+
   console.log('POST new hotel');
   console.log(req.body);
   res
