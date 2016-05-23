@@ -1,15 +1,9 @@
-var dbconn = require('../data/dbconnection.js');
-var ObjectId = require('mongodb').ObjectId;
-
-// Bring some hard coded temporary data
-var hotelData = require('../data/hotel-data.json');
+// Bring in the mongoose model for the hotels
+var mongoose = require('mongoose');
+var Hotel = mongoose.model('Hotel');
 
 // Controller to return all the hotel data.
 module.exports.hotelsGetAll = function(req, res) {
-
-  // Get the database connection
-  var db = dbconn.get();
-  var collection = db.collection('hotels');
 
   // Set defaults for paganation
   var offset = 0;
@@ -25,17 +19,17 @@ module.exports.hotelsGetAll = function(req, res) {
     count = parseInt(req.query.count, 10);
   }
 
-  // From the database collection, get the hotels according to any offset and
+  // From the hotel Mongoose model, get the hotels according to any offset and
   // count query strings present in the requested URL.
-  collection
+  Hotel
     .find()
     .skip(offset)
     .limit(count)
-    .toArray(function(err, docs) {
-      console.log('Found hotels', docs);
+    .exec(function(err, hotels) {
+      console.log('Found hotels', hotels.length);
       res
         .status(200)
-        .json(docs);
+        .json(hotels);
     });
 
 };
@@ -43,20 +37,15 @@ module.exports.hotelsGetAll = function(req, res) {
 // Controller to return data on a singal hotel.
 module.exports.hotelsGetOne = function(req, res) {
 
-  // Get the database connection
-  var db = dbconn.get();
-  var collection = db.collection('hotels');
-
   // Get the URL parmater for the hotel ID.
   var hotelId = req.params.hotelId;
 
   console.log('GET hotelId', hotelId);
 
   // Return the data for the requested
-  collection
-    .findOne({
-      _id : ObjectId(hotelId)
-    }, function(err, doc) {
+  Hotel
+    .findById(hotelId)
+    .exec(function(err, doc) {
       res
         .status(200)
         .json(doc);
