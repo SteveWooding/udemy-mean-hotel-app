@@ -2,12 +2,47 @@
 var mongoose = require('mongoose');
 var Hotel = mongoose.model('Hotel');
 
+// Location query function.
+var runGeoQuery = function(req, res) {
+  var lng = parseFloat(req.query.lng);
+  var lat = parseFloat(req.query.lat);
+
+  // Create a geoJSON point
+  var point = {
+    type: "Point",
+    coordinates: [lng, lat]
+  };
+
+  // Set options for the location search
+  var geoOptions = {
+    spherical: true,
+    maxDistance: 2000,  // Units here is metres
+    num : 5
+  };
+
+  Hotel
+    .geoNear(point, geoOptions, function(err, results, stats) {
+      console.log('Geo results', results);
+      console.log('Geo stats', stats);
+      res
+        .status(200)
+        .json(results);
+    });
+
+};
+
 // Controller to return all the hotel data.
 module.exports.hotelsGetAll = function(req, res) {
 
   // Set defaults for paganation
   var offset = 0;
   var count = 5;
+
+  // Check for a location query string
+  if (req.query && req.query.lat && req.query.lng) {
+    runGeoQuery(req, res);
+    return;
+  }
 
   // Process any offset query string
   if (req.query && req.query.offset) {
