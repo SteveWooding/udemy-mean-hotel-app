@@ -14,10 +14,31 @@ module.exports.reviewsGetAll = function(req, res) {
     .findById(hotelId)
     .select('reviews')
     .exec(function(err, doc) {
+      var response = {
+        status: 200
+      };
+
+      if (err) {
+        console.log('Error finding hotel reviews');
+        response.status = 500;
+        response.message = err;
+      }
+      else if (!doc) {
+        response.status = 404;
+        response.message = {
+          "message": "Hotel ID not found"
+        };
+      }
+      else {
+        response.message = doc.reviews;
+      }
+
       console.log('Returned doc', doc);
+
+      // Return the response
       res
-        .status(200)
-        .json(doc.reviews);
+        .status(response.status)
+        .json(response.message);
     });
 };
 
