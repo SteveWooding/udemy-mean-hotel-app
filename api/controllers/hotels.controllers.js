@@ -32,11 +32,29 @@ var runGeoQuery = function(req, res) {
 
   Hotel
     .geoNear(point, geoOptions, function(err, results, stats) {
+      var response = {
+        status: 200,
+        message: results
+      };
+
+      if (err) {
+        console.log('Error finding hotels by location');
+        response.status = 500;
+        response.message = err;
+      }
+      else if (results.length === 0) {
+        console.log('No nearby hotels found within ' + geoOptions.maxDistance
+          + ' metres.');
+      }
+
       console.log('Geo results', results);
       console.log('Geo stats', stats);
+
+      // Return the response
       res
-        .status(200)
-        .json(results);
+        .status(response.status)
+        .json(response.message);
+
     });
 
 };
