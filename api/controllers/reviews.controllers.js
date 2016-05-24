@@ -15,7 +15,8 @@ module.exports.reviewsGetAll = function(req, res) {
     .select('reviews')
     .exec(function(err, doc) {
       var response = {
-        status: 200
+        status: 200,
+        message: {}
       };
 
       if (err) {
@@ -53,11 +54,37 @@ module.exports.reviewsGetOne = function(req, res) {
     .findById(hotelId)
     .select('reviews')
     .exec(function(err, hotel) {
-      console.log('Returned doc', hotel);
-      var review = hotel.reviews.id(reviewId);
+      var response = {
+        status: 200,
+        message: {}
+      };
+
+      if (err) {
+        console.log('Error finding hotel');
+        response.status = 500;
+        response.message = err;
+      }
+      else if (!hotel) {
+        console.log("Hotel id not found in database", id);
+        response.status = 404;
+        response.message = {
+          "message": "Hotel ID not found " + id
+        };
+      }
+      else {
+        response.message = hotel.reviews.id(reviewId);
+        if (response.message === null) {
+          response.status = 404;
+          response.message = {
+            "message": "Hotel Review ID not found " + reviewId
+          };
+        }
+      }
+
+      // Return the response
       res
-        .status(200)
-        .json(review);
+        .status(response.status)
+        .json(response.message);
     });
 
 };
