@@ -7,6 +7,16 @@ var runGeoQuery = function(req, res) {
   var lng = parseFloat(req.query.lng);
   var lat = parseFloat(req.query.lat);
 
+  // Check to make sure lng and lat are numbers
+  if (isNaN(lng) || isNaN(lat)) {
+    res
+      .status(400)
+      .json({
+        "message": "If supplied in querystring, lng and lat should be numbers."
+      });
+    return;
+  }
+
   // Create a geoJSON point
   var point = {
     type: "Point",
