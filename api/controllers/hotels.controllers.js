@@ -41,8 +41,7 @@ var runGeoQuery = function(req, res) {
         console.log('Error finding hotels by location');
         response.status = 500;
         response.message = err;
-      }
-      else if (results.length === 0) {
+      } else if (results.length === 0) {
         console.log('No nearby hotels found within ' + geoOptions.maxDistance
           + ' metres.');
       }
@@ -115,8 +114,7 @@ module.exports.hotelsGetAll = function(req, res) {
         res
           .status(500)
           .json(err);
-      }
-      else {
+      } else {
         console.log('Found hotels', hotels.length);
         res
           .status(200)
@@ -146,8 +144,7 @@ module.exports.hotelsGetOne = function(req, res) {
         console.log("Error finding hotel");
         response.status = 500;
         response.message = err;
-      }
-      else if (!doc) {
+      } else if (!doc) {
         response.status = 404;
         response.message = {
           "message": "Hotel ID not found"

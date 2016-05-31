@@ -23,14 +23,12 @@ module.exports.reviewsGetAll = function(req, res) {
         console.log('Error finding hotel reviews');
         response.status = 500;
         response.message = err;
-      }
-      else if (!doc) {
+      } else if (!doc) {
         response.status = 404;
         response.message = {
           "message": "Hotel ID not found"
         };
-      }
-      else {
+      } else {
         response.message = doc.reviews;
       }
 
@@ -63,15 +61,13 @@ module.exports.reviewsGetOne = function(req, res) {
         console.log('Error finding hotel');
         response.status = 500;
         response.message = err;
-      }
-      else if (!hotel) {
+      } else if (!hotel) {
         console.log("Hotel id not found in database", id);
         response.status = 404;
         response.message = {
           "message": "Hotel ID not found " + id
         };
-      }
-      else {
+      } else {
         response.message = hotel.reviews.id(reviewId);
         if (response.message === null) {
           response.status = 404;
