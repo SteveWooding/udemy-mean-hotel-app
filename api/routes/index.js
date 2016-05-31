@@ -18,7 +18,8 @@ router
 // Route to all the reviews for a particular hotel
 router
   .route('/hotels/:hotelId/reviews')
-  .get(ctrlReviews.reviewsGetAll);
+  .get(ctrlReviews.reviewsGetAll)
+  .post(ctrlReviews.reviewsAddOne);
 
 // Route to a single review for a particular hotel
 router
