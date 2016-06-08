@@ -217,3 +217,65 @@ module.exports.reviewsUpdateOne = function(req, res) {
       }
     });
 };
+
+
+module.exports.reviewsDeleteOne = function(req, res) {
+  // Get the URL parmater for the hotel and review IDs.
+  var hotelId = req.params.hotelId;
+  var reviewId = req.params.reviewId;
+  console.log('GET reviewId ' + reviewId + ' for hotelId ' + hotelId);
+
+  Hotel
+    .findById(hotelId)
+    .select('reviews')
+    .exec(function(err, hotel) {
+      var review;
+      var response = {
+        status: 200,
+        message: {}
+      };
+
+      if (err) {
+        console.log('Error finding hotel');
+        response.status = 500;
+        response.message = err;
+      } else if (!hotel) {
+        console.log("Hotel id not found in database", id);
+        response.status = 404;
+        response.message = {
+          "message": "Hotel ID not found " + id
+        };
+      } else {
+        review = hotel.reviews.id(reviewId);
+        if (review === null) {
+          response.status = 404;
+          response.message = {
+            "message": "Hotel Review ID not found " + reviewId
+          };
+        }
+      }
+
+      if (response.status !== 200) {
+        // Return the response
+        res
+          .status(response.status)
+          .json(response.message);
+      } else {
+        // Remove the review subdocument
+        hotel.reviews.id(reviewId).remove();
+
+        // Save the hotel document
+        hotel.save(function(err, hotelUpdated) {
+          if (err) {
+            res
+              .status(500)
+              .json(err);
+          } else {
+            res
+              .status(204)
+              .json();
+          }
+        });
+      }
+    });
+};
