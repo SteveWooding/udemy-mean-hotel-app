@@ -18,6 +18,7 @@ app.use(function(req, res, next) {
 
 // Define where the static files are located. An example of middleware.
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
 
 // Use body parser to capture content of POST requests (e.g data in forms)
 app.use(bodyParser.urlencoded({ extended: false }));
