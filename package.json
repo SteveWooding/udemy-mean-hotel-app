@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/SteveWooding/mean-stack-app#readme",
   "dependencies": {
+    "angular": "^1.5.7",
+    "angular-route": "^1.5.7",
     "body-parser": "^1.15.1",
     "express": "^4.13.4",
     "mongodb": "^2.1.19",
