@@ -42,8 +42,8 @@ var runGeoQuery = function(req, res) {
         response.status = 500;
         response.message = err;
       } else if (results.length === 0) {
-        console.log('No nearby hotels found within ' + geoOptions.maxDistance
-          + ' metres.');
+        console.log('No nearby hotels found within ' + geoOptions.maxDistance +
+          ' metres.');
       }
 
       console.log('Geo results', results);
