@@ -23,6 +23,9 @@ app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
 // Use body parser to capture content of POST requests (e.g data in forms)
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// Allow JSON data in POST requests (Angular uses JSON when sending forms)
+app.use(bodyParser.json());
+
 // Use routes as defined in the routes sub-directory for /api urls.
 app.use('/api', routes);
 
