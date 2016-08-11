@@ -15,21 +15,21 @@ router
 router
   .route('/hotels/:hotelId')
   .get(ctrlHotels.hotelsGetOne)
-  .put(ctrlHotels.hotelsUpdateOne)
-  .delete(ctrlHotels.hotelsDeleteOne);
+  .put(ctrlUsers.authenticate, ctrlHotels.hotelsUpdateOne)
+  .delete(ctrlUsers.authenticate, ctrlHotels.hotelsDeleteOne);
 
 // Route to all the reviews for a particular hotel
 router
   .route('/hotels/:hotelId/reviews')
   .get(ctrlReviews.reviewsGetAll)
-  .post(ctrlReviews.reviewsAddOne);
+  .post(ctrlUsers.authenticate, ctrlReviews.reviewsAddOne);
 
 // Route to a single review for a particular hotel
 router
   .route('/hotels/:hotelId/reviews/:reviewId')
   .get(ctrlReviews.reviewsGetOne)
-  .put(ctrlReviews.reviewsUpdateOne)
-  .delete(ctrlReviews.reviewsDeleteOne);
+  .put(ctrlUsers.authenticate, ctrlReviews.reviewsUpdateOne)
+  .delete(ctrlUsers.authenticate, ctrlReviews.reviewsDeleteOne);
 
 // Authentication
 router
